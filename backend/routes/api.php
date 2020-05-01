@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });
  */
-
+/* 
 Route::post('login', function (Request $request) {
 
     $request->validate([
@@ -28,8 +28,27 @@ Route::post('login', function (Request $request) {
 
     return $user->createToken($request->device_name)->plainTextToken;
     
+}); */
+
+Route::post('login', function (Request $request) {
+
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
+
+    auth()->attempt($request->only('email','password'));
+
+    return auth()->user();
+
+
 });
 
+
+Route::post('logout', function () {
+    auth()->logout();
+    return response('');
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
